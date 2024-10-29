@@ -1,6 +1,7 @@
-import { assert } from 'chai';
+import expect from 'expect';
 import path from 'path';
 import fs from 'fs-extra';
+import { describe, it } from '@jest/globals';
 import * as vUtils from '../src/etc/utils';
 import { minorVerRegex, verRegex } from '../src/etc/utils';
 import {
@@ -15,229 +16,168 @@ import {
 } from './stubs/stubs';
 import { Application } from 'typedoc';
 import { load } from '../src/index';
-describe('Unit testing for typedoc-plugin-versions', function () {
-	it('loads and parses options', function () {
-		// @ts-expect-error Application has a private constructor
-		const app = new Application();
+
+describe('Unit testing for typedoc-plugin-versions', () => {
+	it('loads and parses options', async () => {
+		const app = await Application.bootstrap();
 		const options = load(app);
-		assert.hasAllKeys(
-			options,
-			stubOptionKeys,
-			'did not parse all "versions" custom options',
-		);
+
+		for (const key of stubOptionKeys) {
+			expect(options).toHaveProperty(key);
+		}
 	});
 
-	describe('retrieving package version', function () {
-		it('retrieves patch value from package.json', function () {
-			assert.match(
-				vUtils.getSemanticVersion(),
-				verRegex,
-				'did not provide a correctly formatted patch version',
-			);
-			assert.equal(vUtils.getSemanticVersion('0.0.0'), 'v0.0.0');
-			assert.equal(vUtils.getSemanticVersion('0.2.0'), 'v0.2.0');
-			assert.equal(vUtils.getSemanticVersion('1.2.0'), 'v1.2.0');
-			assert.equal(
-				vUtils.getSemanticVersion('1.2.0-alpha.1'),
-				'v1.2.0-alpha.1',
-			);
+	describe('retrieving package version', () => {
+		it('retrieves patch value from package.json', () => {
+			expect(vUtils.getSemanticVersion()).toMatch(verRegex);
+			expect(vUtils.getSemanticVersion('0.0.0')).toEqual('v0.0.0');
+			expect(vUtils.getSemanticVersion('0.2.0')).toEqual('v0.2.0');
+			expect(vUtils.getSemanticVersion('1.2.0')).toEqual('v1.2.0');
+			expect(vUtils.getSemanticVersion('1.2.0-alpha.1')).toEqual('v1.2.0-alpha.1');
 		});
-		it('throws error if version not defined', function () {
-			assert.throws(() => {
-				// @ts-expect-error: Intentionally passing a falsy value to test the error condition.
+		it('throws error if version not defined', () => {
+			expect(() => {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore This is expected to error
 				vUtils.getSemanticVersion(null);
-			}, 'Package version was not found');
+			}).toThrow();
 		});
-		it('retrieves minor value from package.json', function () {
-			assert.match(
-				vUtils.getMinorVersion(),
-				minorVerRegex,
-				'did not return a correctly formatted minor version',
-			);
+		it('retrieves minor value from package.json', () => {
+			expect(vUtils.getMinorVersion()).toMatch(minorVerRegex);
 		});
 	});
-	describe('parses and processes directories', function () {
-		it('retrieves semantically named directories into a list', function () {
-			assert.deepEqual(
-				vUtils.getPackageDirectories(docsPath),
-				['v0.0.0', 'v0.1.0', 'v0.1.1', 'v0.10.1', 'v0.2.3'],
-				'did not retrieve all semanticly named directories',
-			);
+	describe('parses and processes directories', () => {
+		it('retrieves semantically named directories into a list', () => {
+			expect(vUtils.getPackageDirectories(docsPath)).toEqual(['v0.0.0', 'v0.1.0', 'v0.1.1', 'v0.10.1', 'v0.2.3']);
 		});
-		it('lists semantic versions correctly', function () {
+		it('lists semantic versions correctly', () => {
 			const directories = vUtils.getPackageDirectories(docsPath);
-			assert.deepEqual(
-				vUtils.getVersions(directories),
-				['v0.0.0', 'v0.1.0', 'v0.1.1', 'v0.10.1', 'v0.2.3'],
-				'did not return a correctly formatted version[] array',
-			);
+			expect(vUtils.getVersions(directories)).toEqual(['v0.0.0', 'v0.1.0', 'v0.1.1', 'v0.10.1', 'v0.2.3']);
 		});
 	});
-	describe('creates browser assets', function () {
-		it('creates a valid js string from the semantic groups', function () {
+	describe('creates browser assets', () => {
+		it('creates a valid js string from the semantic groups', () => {
 			const metadata = vUtils.refreshMetadata(
 				vUtils.loadMetadata(docsPath),
 				docsPath,
 			);
-			assert.equal(
-				vUtils.makeJsKeys(metadata),
-				jsKeys,
-				'did not create a valid js string',
-			);
+			expect(vUtils.makeJsKeys(metadata)).toEqual(jsKeys);
 		});
 	});
-	describe('gets latest version', function () {
-		it('correctly gets the latest stable version', function () {
-			assert.equal(
-				vUtils.getLatestVersion(
-					'stable',
-					stubVersions.map((v) => vUtils.getSemanticVersion(v)),
-				),
-				undefined,
-			);
+	describe('gets latest version', () => {
+		it('correctly gets the latest stable version', () => {
+			expect(vUtils.getLatestVersion(
+                'stable',
+                stubVersions.map((v) => vUtils.getSemanticVersion(v)),
+            )).toEqual(undefined);
 
-			assert.equal(
-				vUtils.getLatestVersion('stable', ['v1.0.0', 'v1.1.0-alpha.1']),
-				'v1.0.0',
-			);
+			expect(vUtils.getLatestVersion('stable', ['v1.0.0', 'v1.1.0-alpha.1'])).toEqual('v1.0.0');
 		});
-		it('correctly gets the latest dev version', function () {
-			assert.equal(
-				vUtils.getLatestVersion(
-					'dev',
-					stubVersions.map((v) => vUtils.getSemanticVersion(v)),
-				),
-				'v0.10.1',
-			);
+		it('correctly gets the latest dev version', () => {
+			expect(vUtils.getLatestVersion(
+                'dev',
+                stubVersions.map((v) => vUtils.getSemanticVersion(v)),
+            )).toEqual('v0.10.1');
 
-			assert.equal(
-				vUtils.getLatestVersion('dev', ['v1.0.0', 'v1.1.0-alpha.1']),
-				'v1.1.0-alpha.1',
-			);
+			expect(vUtils.getLatestVersion('dev', ['v1.0.0', 'v1.1.0-alpha.1'])).toEqual('v1.1.0-alpha.1');
 		});
 	});
-	describe('infers stable and dev versions', function () {
-		it('correctly interprets versions as stable or dev', function () {
-			assert.equal(vUtils.getVersionAlias('v0.2.0'), 'dev');
-			assert.equal(vUtils.getVersionAlias('v0.2.0-alpha.1'), 'dev');
-			assert.equal(vUtils.getVersionAlias('v1.2.0-alpha.1'), 'dev');
-			assert.equal(vUtils.getVersionAlias('v1.2.0'), 'stable');
+	describe('infers stable and dev versions', () => {
+		it('correctly interprets versions as stable or dev', () => {
+			expect(vUtils.getVersionAlias('v0.2.0')).toEqual('dev');
+			expect(vUtils.getVersionAlias('v0.2.0-alpha.1')).toEqual('dev');
+			expect(vUtils.getVersionAlias('v1.2.0-alpha.1')).toEqual('dev');
+			expect(vUtils.getVersionAlias('v1.2.0')).toEqual('stable');
 		});
 		const metadata = vUtils.loadMetadata(docsPath);
-		it('infers stable version automatically', function () {
-			assert.equal(
-				// will fail when our package.json version >= 1.0.0
-				vUtils.refreshMetadata(metadata, docsPath).stable,
-				undefined,
-			);
-			assert.equal(
-				vUtils.refreshMetadata(metadata, docsPath, '0.2.3').stable,
-				'v0.2.3',
-			);
-			assert.equal(
-				// will fail when our package.json version >= 1.0.0
-				vUtils.refreshMetadata(metadata, docsPath, '1.0.0').stable,
-				undefined,
-			);
+		it('infers stable version automatically', () => {
+			expect(// will fail when our package.json version >= 1.0.0
+            vUtils.refreshMetadata(metadata, docsPath).stable).toEqual(undefined);
+			expect(vUtils.refreshMetadata(metadata, docsPath, '0.2.3').stable).toEqual('v0.2.3');
+			expect(// will fail when our package.json version >= 1.0.0
+            vUtils.refreshMetadata(metadata, docsPath, '1.0.0').stable).toEqual(undefined);
 		});
-		it('infers dev version automatically', function () {
-			assert.equal(
-				// will fail when our package.json version > 0.10.1
-				vUtils.refreshMetadata(metadata, docsPath).dev,
-				'v0.10.1',
-			);
+		it('infers dev version automatically', () => {
+			expect(// will fail when our package.json version > 0.10.1
+            vUtils.refreshMetadata(metadata, docsPath).dev).toEqual('v0.10.1');
 			const currentVersion = process.env.npm_package_version;
-			assert.equal(
-				vUtils.refreshMetadata(
-					metadata,
-					docsPath,
-					undefined,
-					currentVersion,
-				).dev,
-				'v' + currentVersion,
-			);
-			assert.equal(
-				// will fail when our package.json version > 0.10.1
-				vUtils.refreshMetadata(metadata, docsPath, undefined, '1.0.0')
-					.dev,
-				'v0.10.1',
-			);
+			expect(vUtils.refreshMetadata(
+                metadata,
+                docsPath,
+                undefined,
+                currentVersion,
+            ).dev).toEqual('v' + currentVersion);
+			expect(// will fail when our package.json version > 0.10.1
+            vUtils.refreshMetadata(metadata, docsPath, undefined, '1.0.0')
+                .dev).toEqual('v0.10.1');
 		});
 	});
-	describe('creates symlinks', function () {
-		it('creates a stable version symlink', function () {
+	describe('creates symlinks', () => {
+		it('creates a stable version symlink', () => {
 			vUtils.makeAliasLink('stable', docsPath, 'v0.1');
 			const link = path.join(docsPath, 'stable');
-			assert.isTrue(
-				fs.existsSync(link),
-				'did not create a stable symlink',
-			);
-			assert.throws(() => {
+			expect(fs.existsSync(link)).toBe(true);
+			expect(() => {
 				vUtils.makeAliasLink('stable', docsPath, 'v0.11');
-			}, 'Document directory does not exist: v0.11');
+			}).toThrow();
 		});
-		it('creates a dev version symlink', function () {
+		it('creates a dev version symlink', () => {
 			vUtils.makeAliasLink('dev', docsPath, 'v0.1.0');
 			const link = path.join(docsPath, 'dev');
-			assert.isTrue(fs.existsSync(link), 'did not create a dev symlink');
-			assert.throws(() => {
+			expect(fs.existsSync(link)).toBe(true);
+			expect(() => {
 				vUtils.makeAliasLink('dev', docsPath, 'v0.11.1');
-			}, 'Document directory does not exist: v0.11.1');
+			}).toThrow();
 		});
-		it('creates all minor version links', function () {
+		it('creates all minor version links', () => {
 			const directories = vUtils.getPackageDirectories(docsPath);
 			const versions = vUtils.getVersions(directories);
 			vUtils.makeMinorVersionLinks(versions, docsPath);
 			stubSemanticLinks.forEach((link) => {
 				const linkPath = path.join(docsPath, link);
-				assert.isTrue(
-					fs.existsSync(linkPath),
-					`did not create a symlink for ${link}`,
-				);
+				expect(fs.existsSync(linkPath)).toBe(true);
 			});
 		});
 	});
-	describe('handle file operations correctly', function () {
-		// @ts-expect-error Application has a private constructor
-		const app = new Application();
-		const version = 'v0.0.0';
-		app.options.setValue('out', docsPath);
-		const dirs = vUtils.getPaths(app, version);
-		it('maps correct output paths', function () {
-			assert.hasAllKeys(
-				dirs,
-				stubPathKeys,
-				'not all directories returned',
-			);
-			assert.isTrue(
-				dirs.rootPath.endsWith(stubRootPath),
-				'root path not resolved correctly',
-			);
-			assert.isTrue(
-				dirs.targetPath.endsWith(stubTargetPath(version)),
-				'target path not resolved correctly',
-			);
+	describe('handle file operations correctly', () => {
+		it('maps correct output paths', async () => {
+			const app = await Application.bootstrap();
+			const version = 'v0.0.0';
+			app.options.setValue('out', docsPath);
+			const dirs = vUtils.getPaths(app, version);
+			for (const key of stubPathKeys) {
+				expect(dirs).toHaveProperty(key);
+			}
+			expect(dirs.rootPath.endsWith(stubRootPath)).toBe(true);
+			expect(dirs.targetPath.endsWith(stubTargetPath(version))).toBe(true);
 		});
-		it('does not error if .nojekyll is not present', function () {
-			assert.doesNotThrow(() => {
+		it('does not error if .nojekyll is not present', async () => {
+			const app = await Application.bootstrap();
+			const version = 'v0.0.0';
+			app.options.setValue('out', docsPath);
+			const dirs = vUtils.getPaths(app, version);
+			expect(() => {
 				vUtils.handleJeckyll(dirs.rootPath, dirs.targetPath);
-			});
+			}).not.toThrow();
 		});
-		it('copies .nojekyll to the document root if exists', function () {
+		it('copies .nojekyll to the document root if exists', async () => {
+			const app = await Application.bootstrap();
+			const version = 'v0.0.0';
+			app.options.setValue('out', docsPath);
+			const dirs = vUtils.getPaths(app, version);
 			fs.createFileSync(path.join(dirs.targetPath, '.nojekyll'));
 			vUtils.handleJeckyll(dirs.rootPath, dirs.targetPath);
-			assert.isTrue(
-				fs.existsSync(path.join(dirs.rootPath, '.nojekyll')),
-				'did not move .nojekyll',
-			);
+			expect(fs.existsSync(path.join(dirs.rootPath, '.nojekyll'))).toBe(true);
 		});
-		it('copies static assets into the target version folder', function () {
+		it('copies static assets into the target version folder', async () => {
+			const app = await Application.bootstrap();
+			const version = 'v0.0.0';
+			app.options.setValue('out', docsPath);
+			const dirs = vUtils.getPaths(app, version);
 			vUtils.handleAssets(dirs.targetPath);
-			assert.isTrue(
-				fs.existsSync(
-					path.join(dirs.targetPath, 'assets/versionsMenu.js'),
-				),
-			);
+			expect(fs.existsSync(
+                path.join(dirs.targetPath, 'assets/versionsMenu.js'),
+            )).toBe(true);
 		});
 	});
 });

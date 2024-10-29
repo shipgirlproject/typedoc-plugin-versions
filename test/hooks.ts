@@ -1,39 +1,33 @@
-import mock from 'jest-mock';
-import { jest } from '@jest/globals';
+import 'source-map-support/register';
+import { jest, beforeAll, afterEach, afterAll } from '@jest/globals';
 process.env.Node = 'test';
 
 import fs from 'fs-extra';
 import path from 'path';
 import { docsPath, stubVersions } from './stubs/stubs';
 
-mock.spyOn(console, 'error').mockClear();
-mock.spyOn(console, 'warn').mockClear();
-mock.spyOn(console, 'log').mockClear();
+jest.spyOn(console, 'error').mockClear();
+jest.spyOn(console, 'warn').mockClear();
+jest.spyOn(console, 'log').mockClear();
 
-export const mochaHooks = {
-	beforeAll(done) {
-		deleteFolders([docsPath]);
-		fs.mkdirSync(docsPath);
-		stubVersions.forEach((version) => {
-			fs.mkdirSync(path.join(docsPath, version));
-		});
-		done();
-	},
-	beforeEach(done) {
-		done();
-	},
-	afterEach(done) {
-		jest.restoreAllMocks();
-		mock.spyOn(console, 'error').mockClear();
-		mock.spyOn(console, 'warn').mockClear();
-		mock.spyOn(console, 'log').mockClear();
-		done();
-	},
-	afterAll(done) {
-		deleteFolders([docsPath]);
-		done();
-	},
-};
+beforeAll(() => {
+	deleteFolders([docsPath]);
+	fs.mkdirSync(docsPath);
+	stubVersions.forEach((version) => {
+		fs.mkdirSync(path.join(docsPath, version));
+	});
+});
+
+afterEach(() => {
+	jest.restoreAllMocks();
+	jest.spyOn(console, 'error').mockClear();
+	jest.spyOn(console, 'warn').mockClear();
+	jest.spyOn(console, 'log').mockClear();
+});
+
+afterAll(() => {
+	deleteFolders([docsPath]);
+});
 
 const deleteFolders = (folders: string[]) => {
 	folders.forEach((folder) => {
