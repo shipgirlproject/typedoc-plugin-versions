@@ -7,8 +7,9 @@
 		"lint": "prettier -c .",
 		"test": "nyc mocha",
 		"build": "tsc && node ./build.js",
-		"docs": "typedoc --tsconfig ./tsconfig.json",
-		"docs:build": "npm run build && typedoc"
+		"docs": "typedoc",
+		"docs:build": "npm run build && typedoc",
+		"prepare": "npm run build"
 	},
 	"repository": {
 		"type": "git",
