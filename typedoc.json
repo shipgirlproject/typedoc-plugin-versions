@@ -9,5 +9,6 @@
 	"logLevel": "Verbose",
 	"plugin": ["./dist"],
 	"versions": { "packageFile": "package.json", "makeRelativeLinks": false },
-	"skipErrorChecking": true
+	"skipErrorChecking": true,
+	"name": "Versions Plugin Docs"
 }
