@@ -5,8 +5,7 @@
 	"main": "src/index",
 	"scripts": {
 		"lint": "prettier -c .",
-		"test": "mocha",
-		"coverage": "nyc mocha",
+		"test": "nyc mocha",
 		"build": "tsc && node ./build.js",
 		"docs": "typedoc --tsconfig ./tsconfig.json",
 		"docs:build": "npm run build && typedoc"
