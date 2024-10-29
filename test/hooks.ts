@@ -1,13 +1,14 @@
+import mock from 'jest-mock';
+import { jest } from '@jest/globals';
 process.env.Node = 'test';
 
-import sinon from 'sinon';
 import fs from 'fs-extra';
 import path from 'path';
 import { docsPath, stubVersions } from './stubs/stubs';
 
-sinon.stub(console, 'error');
-sinon.stub(console, 'warn');
-sinon.stub(console, 'log');
+mock.spyOn(console, 'error').mockClear();
+mock.spyOn(console, 'warn').mockClear();
+mock.spyOn(console, 'log').mockClear();
 
 export const mochaHooks = {
 	beforeAll(done) {
@@ -22,10 +23,10 @@ export const mochaHooks = {
 		done();
 	},
 	afterEach(done) {
-		sinon.restore();
-		sinon.stub(console, 'error');
-		sinon.stub(console, 'warn');
-		sinon.stub(console, 'log');
+		jest.restoreAllMocks();
+		mock.spyOn(console, 'error').mockClear();
+		mock.spyOn(console, 'warn').mockClear();
+		mock.spyOn(console, 'log').mockClear();
 		done();
 	},
 	afterAll(done) {
