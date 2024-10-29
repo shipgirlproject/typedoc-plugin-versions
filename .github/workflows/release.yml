@@ -17,9 +17,9 @@ jobs:
               with:
                   name: distribution
                   path: ./dist
-
+            
             - name: Package the build artifact
-              run: npm pack ./dist
+              run: npm pack ./dist --ignore-scripts
 
             - name: Get Package Version
               run: |
