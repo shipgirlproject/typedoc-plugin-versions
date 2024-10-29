@@ -12,13 +12,13 @@ jobs:
             - uses: actions/checkout@v4
             - run: mkdir -p ./dist
 
-            - run: jq 'del(.scripts.prepare)' ./dist/package.json
-
             - name: Download the build artifact
               uses: actions/download-artifact@v4
               with:
                   name: distribution
                   path: ./dist
+
+            - run: jq 'del(.scripts.prepare)' ./dist/package.json
             
             - name: Package the build artifact
               run: npm pack ./dist
