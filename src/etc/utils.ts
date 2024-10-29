@@ -7,8 +7,8 @@
 import path from 'path';
 import fs from 'fs-extra';
 import semver from 'semver';
-import { version, semanticAlias, versionsOptions, metadata } from '../types';
-import { Application, Logger, TypeDocReader } from 'typedoc';
+import { version, semanticAlias, metadata } from '../types';
+import { Application } from 'typedoc';
 const packagePath = path.join(process.cwd(), 'package.json');
 const pack = fs.readJSONSync(packagePath);
 
@@ -390,19 +390,6 @@ export function getSymlinkVersion(symlink: string, docRoot: string): version {
 			return getSemanticVersion(path.basename(targetPath));
 		}
 	}
-}
-
-/**
- * Workaround for [#2024](https://github.com/TypeStrong/typedoc/issues/2024)
- * @param app
- * @returns correctly overridden options
- */
-export function getVersionsOptions(app: Application): versionsOptions {
-	const defaultOpts = app.options.getValue('versions') as versionsOptions;
-	app.options.addReader(new TypeDocReader());
-	app.options.read(new Logger());
-	const options = app.options.getValue('versions') as versionsOptions;
-	return { ...defaultOpts, ...options };
 }
 
 /**

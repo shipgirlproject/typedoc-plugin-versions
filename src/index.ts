@@ -21,17 +21,17 @@ export function load(app: Application) {
 	app.options.addDeclaration({
 		help: 'Options for typedoc-plugin-versions',
 		name: 'versions',
-		type: ParameterType.Mixed,
+		type: ParameterType.Object,
 		defaultValue: {
 			stable: 'auto',
 			dev: 'auto',
 			domLocation: 'false',
 			packageFile: 'package.json',
 			makeRelativeLinks: false,
-		} as versionsOptions,
+		},
 	});
 
-	const vOptions = vUtils.getVersionsOptions(app) as versionsOptions;
+	const vOptions = app.options.getValue("versions") as versionsOptions;
 
 	vHooks.injectSelectJs(app);
 	vHooks.injectSelectHtml(app, vOptions.domLocation);
