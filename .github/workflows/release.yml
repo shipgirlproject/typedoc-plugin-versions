@@ -49,6 +49,8 @@ jobs:
                   name: distribution
                   path: ./dist
 
+            - run: cat <<< $(jq 'del(.scripts.prepare)' ./dist/package.json) > ./dist/package.json
+
             - name: Publish to npm
               uses: actions/setup-node@v4
               with:
