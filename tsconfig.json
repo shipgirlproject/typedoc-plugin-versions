@@ -16,6 +16,5 @@
 		"sourceMap": true,
 		"build": true,
 		"incremental": true,
-		"allowJs": true
 	}
 }

@@ -1,13 +1,13 @@
 {
 	"name": "@shipgirl/typedoc-plugin-versions",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"description": "It keeps track of your document builds and provides a select menu for versions",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"lint": "prettier -c .",
 		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-		"build": "tsc",
+		"build": "tsc && cpy ./src/assets/versionsMenu.js ./dist/assets/ --flat",
 		"docs": "typedoc",
 		"build:docs": "npm run build && typedoc",
 		"prepare": "npm run build"
@@ -42,6 +42,7 @@
 		"@types/semver": "^7.5.8",
 		"@typescript-eslint/eslint-plugin": "^8.12.1",
 		"@typescript-eslint/parser": "^8.12.1",
+		"cpy-cli": "^5.0.0",
 		"cross-env": "^7.0.3",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
