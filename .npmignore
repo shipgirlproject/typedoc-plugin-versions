@@ -1,5 +1,6 @@
-docs
-node_modules
+docs/
+src/
+node_modules/
 .github
 .nyc*
 .vs*
