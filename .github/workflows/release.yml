@@ -1,31 +1,19 @@
-name: RELEASE AND PUBLISH
+name: Release and Publish
 on:
     workflow_dispatch:
 jobs:
     test:
         uses: ./.github/workflows/test.yml
 
-    upload_coverage:
-        needs: test
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/download-artifact@v3
-              with:
-                  name: coverage
-
-            - uses: codecov/codecov-action@v3
-              with:
-                  files: ./clover.xml
-
     release:
         needs: test
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - run: mkdir -p ./dist
 
             - name: Download the build artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                   name: distribution
                   path: ./dist
@@ -38,7 +26,7 @@ jobs:
                   echo "RELEASE_NAME=$(npm info ./ version)" >> $GITHUB_ENV
 
             - name: Release
-              uses: softprops/action-gh-release@v1
+              uses: softprops/action-gh-release@v2
               with:
                   draft: false
                   prerelease: false
@@ -50,23 +38,23 @@ jobs:
         needs: test
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - run: mkdir -p ./dist
 
             - name: Download the build artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                   name: distribution
                   path: ./dist
 
             - name: Publish to npm
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
-                  node-version: '16.x'
-                  cache: 'npm'
-                  registry-url: 'https://registry.npmjs.org'
+                  node-version: lts/*
+                  cache: npm
+                  registry-url: https://registry.npmjs.org
             - run: npm ci
-            - run: npm publish ./dist
+            - run: npm publish --access public ./dist
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

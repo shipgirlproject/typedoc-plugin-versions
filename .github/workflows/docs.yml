@@ -1,8 +1,7 @@
-name: PUBLISH DOCS
+name: Publish Docs
 on:
     workflow_dispatch:
     workflow_call:
-    # or set up your own custom triggers
 permissions:
     contents: write # allows the 'Commit' step without tokens
 
@@ -11,7 +10,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: get the gh-pages repo
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   ref: gh-pages
 
@@ -21,7 +20,7 @@ jobs:
                   tar -cvf documentation.tar ./docs
 
             - name: create a document artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: documentation
                   path: documentation.tar
@@ -31,31 +30,31 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout src
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - run: mkdir -p ./docs
             - name: Download the existing documents artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                   name: documentation
             - run: tar -xf documentation.tar ./docs -C ./docs
 
             - name: Build
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
-                  node-version: 16.x
-                  cache: 'npm'
-            - run: npm ci
+                  node-version: lts/*
+                  cache: npm
+            - run: npm i
             - run: npm run build # set up 'build' script in your package.json
 
             - name: Build documents
-              run: npm run docs #set up 'docs' build script in your package.json
+              run: npm run build:docs #set up 'build:docs' build script in your package.json
 
             - name: tar the new docs
               run: tar -cvf newdocumentation.tar ./docs
 
             - name: create a new document artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: newdocumentation
                   path: newdocumentation.tar
@@ -65,13 +64,13 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: checkout the gh-pages repo
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   ref: gh-pages
 
             - run: mkdir -p ./docs
             - name: Download the new documents artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                   name: newdocumentation
             - run: tar -xf newdocumentation.tar ./docs -C ./docs
