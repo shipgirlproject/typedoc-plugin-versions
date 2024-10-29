@@ -9,7 +9,7 @@
 		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
 		"build": "tsc",
 		"docs": "typedoc",
-		"docs:build": "npm run build && typedoc",
+		"build:docs": "npm run build && typedoc",
 		"prepare": "npm run build"
 	},
 	"repository": {
