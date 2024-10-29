@@ -10,17 +10,12 @@ DOC_VERSIONS.forEach((version) => {
 });
 
 const locationSplit = location.pathname.split('/');
-const thisVersion = locationSplit.find((path) =>
-	['stable', 'dev', ...DOC_VERSIONS].includes(path)
-);
+const thisVersion = locationSplit.find((path) => ['stable', 'dev', ...DOC_VERSIONS].includes(path));
 select.value = DOC_VERSIONS.includes(thisVersion)
 	? thisVersion
 	: DOC_VERSIONS[0];
 select.onchange = () => {
-	const newPaths = window.location.pathname.replace(
-		`/${thisVersion}/`,
-		`/${select.value}/`
-	);
+	const newPaths = window.location.pathname.replace(`/${thisVersion}/`, `/${select.value}/`);
 	const newUrl = new URL(newPaths, window.location.origin);
 	window.location.assign(newUrl);
 };

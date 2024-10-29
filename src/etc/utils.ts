@@ -47,7 +47,7 @@ export function refreshMetadata(
 	docRoot: string,
 	stable = 'auto',
 	dev = 'auto',
-	packageFile = 'package.json'
+	packageFile = 'package.json',
 ): metadata {
 	const validate = (v: string) => (v === 'auto' ? v : getSemanticVersion(v));
 	const vStable = validate(stable);
@@ -56,7 +56,7 @@ export function refreshMetadata(
 	const versions = refreshMetadataVersions(
 		[...(metadata.versions ?? []), metadata.stable, metadata.dev],
 		docRoot,
-		packageFile
+		packageFile,
 	);
 
 	return {
@@ -75,7 +75,7 @@ export function refreshMetadata(
 export function refreshMetadataVersions(
 	versions: version[],
 	docRoot: string,
-	packageFile
+	packageFile,
 ) {
 	return (
 		[
@@ -126,7 +126,7 @@ export function refreshMetadataAlias(
 	alias: semanticAlias,
 	versions: version[],
 	stable: 'auto' | version = 'auto',
-	dev: 'auto' | version = 'auto'
+	dev: 'auto' | version = 'auto',
 ): version {
 	const option = alias === 'stable' ? stable : dev;
 	if (
@@ -144,7 +144,7 @@ export function refreshMetadataAlias(
 				semver.gte(
 					latest,
 					getLatestVersion('stable', versions, stable, dev),
-					true
+					true,
 				))
 		) {
 			return getSemanticVersion(latest);
@@ -173,7 +173,7 @@ export function getLatestVersion(
 	alias: semanticAlias,
 	versions: version[],
 	stable: 'auto' | version = 'auto',
-	dev: 'auto' | version = 'auto'
+	dev: 'auto' | version = 'auto',
 ): version {
 	return [...versions]
 		.sort(semver.rcompare)
@@ -194,7 +194,7 @@ export function getLatestVersion(
 export function getVersionAlias(
 	version?: string,
 	stable: 'auto' | version = 'auto',
-	dev: 'auto' | version = 'auto'
+	dev: 'auto' | version = 'auto',
 ): semanticAlias {
 	version = getSemanticVersion(version);
 	if (stable !== 'auto' && version === getSemanticVersion(stable))
@@ -302,7 +302,7 @@ export function makeAliasLink(
 	alias: semanticAlias,
 	docRoot: string,
 	pegVersion: version,
-	makeRelativeSymlinks?: boolean
+	makeRelativeSymlinks?: boolean,
 ): void {
 	pegVersion = getSemanticVersion(pegVersion);
 	const _docRoot = makeRelativeSymlinks ? './' : docRoot;
@@ -329,7 +329,7 @@ export function makeMinorVersionLinks(
 	docRoot: string,
 	makeRelativeSymlinks?: boolean,
 	stable: 'auto' | version = 'auto',
-	dev: 'auto' | version = 'auto'
+	dev: 'auto' | version = 'auto',
 ): void {
 	for (const version of versions
 		// get highest patch per version
@@ -341,8 +341,8 @@ export function makeMinorVersionLinks(
 					semver.satisfies(
 						v,
 						`${semver.major(version)}.${semver.minor(version)}.x`,
-						{ includePrerelease: true }
-					)
+						{ includePrerelease: true },
+					),
 			);
 			// fallback to highest patch
 			return (
@@ -351,8 +351,8 @@ export function makeMinorVersionLinks(
 					semver.satisfies(
 						v,
 						`${semver.major(version)}.${semver.minor(version)}.x`,
-						{ includePrerelease: true }
-					)
+						{ includePrerelease: true },
+					),
 				)
 			);
 		})
@@ -428,7 +428,9 @@ export function getPaths(app: Application, version?: version) {
 export function handleJeckyll(rootPath: string, targetPath: string): void {
 	const srcJeckPath = path.join(targetPath, '.nojekyll');
 	const targetJeckPath = path.join(rootPath, '.nojekyll');
+	// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 	fs.existsSync(targetJeckPath) && fs.removeSync(targetJeckPath);
+	// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 	fs.existsSync(srcJeckPath) && fs.moveSync(srcJeckPath, targetJeckPath);
 }
 
@@ -441,7 +443,7 @@ export function handleAssets(targetPath: string, srcDir: string = __dirname) {
 	fs.ensureDirSync(path.join(targetPath, 'assets'));
 	fs.copyFileSync(
 		sourceAsset,
-		path.join(targetPath, 'assets/versionsMenu.js')
+		path.join(targetPath, 'assets/versionsMenu.js'),
 	);
 }
 

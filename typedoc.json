@@ -2,11 +2,12 @@
 	"$schema": "https://typedoc.org/schema.json",
 	"out": "./docs",
 	"entryPoints": ["./src/index.ts"],
-	"media": "./media",
+	// "media": "./media",
 	"treatWarningsAsErrors": false,
 	"externalPattern": ["**/node_modules/**"],
 	"excludeExternals": true,
 	"logLevel": "Verbose",
 	"plugin": ["./dist"],
-	"versions": { "packageFile": "package.json", "makeRelativeLinks": false }
+	"versions": { "packageFile": "package.json", "makeRelativeLinks": false },
+	"skipErrorChecking": true
 }

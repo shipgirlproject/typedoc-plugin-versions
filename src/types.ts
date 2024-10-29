@@ -4,6 +4,8 @@
  * @module
  */
 
+import { RendererHooks } from 'typedoc';
+
 /**
  * User defined options under the key of `versions` in typedoc.json
  */
@@ -22,22 +24,11 @@ export interface versionsOptions {
 	 * A custom DOM location to render the HTML `select` dropdown corresponding to [typedoc render hooks](https://typedoc.org/api/interfaces/RendererHooks.html)
 	 * Default: Injects to left of header using vanilla js - not a typedoc render hook.
 	 */
-	domLocation?: validLocation | 'false';
+	domLocation?: keyof RendererHooks | 'false';
 	packageFile?: string | 'package.json';
 	makeRelativeLinks?: boolean;
 }
 export type version = `v${string}`;
-
-/**
- * valid placement overrides for the select, corresponds to [typedoc render hooks](https://typedoc.org/api/interfaces/RendererHooks.html)
- */
-export type validLocation =
-	| 'body.begin'
-	| 'body.end'
-	| 'content.begin'
-	| 'content.end'
-	| 'navigation.begin'
-	| 'navigation.end';
 export type semanticAlias = 'stable' | 'dev';
 
 export type metadata = {

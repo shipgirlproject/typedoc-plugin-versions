@@ -1,19 +1,21 @@
 {
-	"name": "typedoc-plugin-versions",
+	"name": "@shipgirl/typedoc-plugin-versions",
 	"version": "0.2.4",
 	"description": "It keeps track of your document builds and provides a select menu for versions",
 	"main": "src/index",
 	"scripts": {
-		"test": "prettier -c . && nyc mocha",
-		"build": "npx tsc && node ./build.js",
-		"docs": "typedoc",
+		"lint": "prettier -c .",
+		"test": "mocha",
+		"coverage": "nyc mocha",
+		"build": "tsc && node ./build.js",
+		"docs": "typedoc --tsconfig ./tsconfig.json",
 		"docs:build": "npm run build && typedoc"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/citkane/typedoc-plugin-versions.git"
+		"url": "git+https://github.com/shipgirlproject/typedoc-plugin-versions.git"
 	},
-	"homepage": "https://github.com/citkane/typedoc-plugin-versions#readme",
+	"homepage": "https://github.com/shipgirlproject/typedoc-plugin-versions#readme",
 	"engines": {
 		"npm": ">=6.0.0",
 		"node": ">=14.0.0"
@@ -26,37 +28,32 @@
 		"versioning",
 		"typedocplugin"
 	],
-	"author": "Michael Jonker",
-	"contributors": [
-		"Tobey Blaber (https://github.com/toebeann)"
-	],
 	"license": "MIT",
 	"dependencies": {
-		"fs-extra": "^10.1.0",
-		"semver": "^7.3.7"
+		"fs-extra": "^11.2.0",
+		"semver": "^7.6.3"
 	},
 	"devDependencies": {
-		"@types/chai": "^4.3.1",
-		"@types/fs-extra": "^9.0.13",
-		"@types/mocha": "^9.1.1",
-		"@types/node": "^18.6.2",
-		"@types/prettier": "^2.7.0",
-		"@types/semver": "^7.3.12",
-		"@typescript-eslint/eslint-plugin": "^5.34.0",
-		"@typescript-eslint/parser": "^5.34.0",
-		"chai": "^4.3.6",
-		"eslint": "^8.22.0",
-		"eslint-config-prettier": "^8.5.0",
-		"mocha": "^10.0.0",
-		"nyc": "^15.1.0",
-		"prettier": "^2.7.1",
-		"sinon": "^14.0.0",
-		"ts-node": "^10.9.1",
-		"typedoc": "^0.23.28",
-		"typescript": "^4.7.4"
+		"@types/chai": "^5.0.1",
+		"@types/fs-extra": "^11.0.4",
+		"@types/mocha": "^10.0.9",
+		"@types/node": "^22.8.2",
+		"@types/semver": "^7.5.8",
+		"@typescript-eslint/eslint-plugin": "^8.12.1",
+		"@typescript-eslint/parser": "^8.12.1",
+		"chai": "^5.1.2",
+		"eslint": "^8.57.0",
+		"eslint-config-prettier": "^9.1.0",
+		"mocha": "^10.7.3",
+		"nyc": "^17.1.0",
+		"prettier": "^3.3.3",
+		"sinon": "^19.0.2",
+		"ts-node": "^10.9.2",
+		"typedoc": "~0.26.10",
+		"typescript": "^5.6.3"
 	},
 	"peerDependencies": {
-		"typedoc": "^0.23"
+		"typedoc": "~0.26.0"
 	},
 	"mocha": {
 		"extension": [

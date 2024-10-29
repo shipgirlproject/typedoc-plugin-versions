@@ -36,6 +36,7 @@ export const mochaHooks = {
 
 const deleteFolders = (folders: string[]) => {
 	folders.forEach((folder) => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		fs.existsSync(folder) && fs.rmSync(folder, { recursive: true });
 	});
 };

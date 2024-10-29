@@ -17,12 +17,13 @@ import { Application } from 'typedoc';
 import { load } from '../src/index';
 describe('Unit testing for typedoc-plugin-versions', function () {
 	it('loads and parses options', function () {
+		// @ts-expect-error Application has a private constructor
 		const app = new Application();
 		const options = load(app);
 		assert.hasAllKeys(
 			options,
 			stubOptionKeys,
-			'did not parse all "versions" custom options'
+			'did not parse all "versions" custom options',
 		);
 	});
 
@@ -31,14 +32,14 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 			assert.match(
 				vUtils.getSemanticVersion(),
 				verRegex,
-				'did not provide a correctly formatted patch version'
+				'did not provide a correctly formatted patch version',
 			);
 			assert.equal(vUtils.getSemanticVersion('0.0.0'), 'v0.0.0');
 			assert.equal(vUtils.getSemanticVersion('0.2.0'), 'v0.2.0');
 			assert.equal(vUtils.getSemanticVersion('1.2.0'), 'v1.2.0');
 			assert.equal(
 				vUtils.getSemanticVersion('1.2.0-alpha.1'),
-				'v1.2.0-alpha.1'
+				'v1.2.0-alpha.1',
 			);
 		});
 		it('throws error if version not defined', function () {
@@ -51,7 +52,7 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 			assert.match(
 				vUtils.getMinorVersion(),
 				minorVerRegex,
-				'did not return a correctly formatted minor version'
+				'did not return a correctly formatted minor version',
 			);
 		});
 	});
@@ -60,7 +61,7 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 			assert.deepEqual(
 				vUtils.getPackageDirectories(docsPath),
 				['v0.0.0', 'v0.1.0', 'v0.1.1', 'v0.10.1', 'v0.2.3'],
-				'did not retrieve all semanticly named directories'
+				'did not retrieve all semanticly named directories',
 			);
 		});
 		it('lists semantic versions correctly', function () {
@@ -68,7 +69,7 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 			assert.deepEqual(
 				vUtils.getVersions(directories),
 				['v0.0.0', 'v0.1.0', 'v0.1.1', 'v0.10.1', 'v0.2.3'],
-				'did not return a correctly formatted version[] array'
+				'did not return a correctly formatted version[] array',
 			);
 		});
 	});
@@ -76,12 +77,12 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 		it('creates a valid js string from the semantic groups', function () {
 			const metadata = vUtils.refreshMetadata(
 				vUtils.loadMetadata(docsPath),
-				docsPath
+				docsPath,
 			);
 			assert.equal(
 				vUtils.makeJsKeys(metadata),
 				jsKeys,
-				'did not create a valid js string'
+				'did not create a valid js string',
 			);
 		});
 	});
@@ -90,28 +91,28 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 			assert.equal(
 				vUtils.getLatestVersion(
 					'stable',
-					stubVersions.map((v) => vUtils.getSemanticVersion(v))
+					stubVersions.map((v) => vUtils.getSemanticVersion(v)),
 				),
-				undefined
+				undefined,
 			);
 
 			assert.equal(
 				vUtils.getLatestVersion('stable', ['v1.0.0', 'v1.1.0-alpha.1']),
-				'v1.0.0'
+				'v1.0.0',
 			);
 		});
 		it('correctly gets the latest dev version', function () {
 			assert.equal(
 				vUtils.getLatestVersion(
 					'dev',
-					stubVersions.map((v) => vUtils.getSemanticVersion(v))
+					stubVersions.map((v) => vUtils.getSemanticVersion(v)),
 				),
-				'v0.10.1'
+				'v0.10.1',
 			);
 
 			assert.equal(
 				vUtils.getLatestVersion('dev', ['v1.0.0', 'v1.1.0-alpha.1']),
-				'v1.1.0-alpha.1'
+				'v1.1.0-alpha.1',
 			);
 		});
 	});
@@ -127,23 +128,23 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 			assert.equal(
 				// will fail when our package.json version >= 1.0.0
 				vUtils.refreshMetadata(metadata, docsPath).stable,
-				undefined
+				undefined,
 			);
 			assert.equal(
 				vUtils.refreshMetadata(metadata, docsPath, '0.2.3').stable,
-				'v0.2.3'
+				'v0.2.3',
 			);
 			assert.equal(
 				// will fail when our package.json version >= 1.0.0
 				vUtils.refreshMetadata(metadata, docsPath, '1.0.0').stable,
-				undefined
+				undefined,
 			);
 		});
 		it('infers dev version automatically', function () {
 			assert.equal(
 				// will fail when our package.json version > 0.10.1
 				vUtils.refreshMetadata(metadata, docsPath).dev,
-				'v0.10.1'
+				'v0.10.1',
 			);
 			const currentVersion = process.env.npm_package_version;
 			assert.equal(
@@ -151,15 +152,15 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 					metadata,
 					docsPath,
 					undefined,
-					currentVersion
+					currentVersion,
 				).dev,
-				'v' + currentVersion
+				'v' + currentVersion,
 			);
 			assert.equal(
 				// will fail when our package.json version > 0.10.1
 				vUtils.refreshMetadata(metadata, docsPath, undefined, '1.0.0')
 					.dev,
-				'v0.10.1'
+				'v0.10.1',
 			);
 		});
 	});
@@ -169,7 +170,7 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 			const link = path.join(docsPath, 'stable');
 			assert.isTrue(
 				fs.existsSync(link),
-				'did not create a stable symlink'
+				'did not create a stable symlink',
 			);
 			assert.throws(() => {
 				vUtils.makeAliasLink('stable', docsPath, 'v0.11');
@@ -191,12 +192,13 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 				const linkPath = path.join(docsPath, link);
 				assert.isTrue(
 					fs.existsSync(linkPath),
-					`did not create a symlink for ${link}`
+					`did not create a symlink for ${link}`,
 				);
 			});
 		});
 	});
 	describe('handle file operations correctly', function () {
+		// @ts-expect-error Application has a private constructor
 		const app = new Application();
 		const version = 'v0.0.0';
 		app.options.setValue('out', docsPath);
@@ -205,15 +207,15 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 			assert.hasAllKeys(
 				dirs,
 				stubPathKeys,
-				'not all directories returned'
+				'not all directories returned',
 			);
 			assert.isTrue(
 				dirs.rootPath.endsWith(stubRootPath),
-				'root path not resolved correctly'
+				'root path not resolved correctly',
 			);
 			assert.isTrue(
 				dirs.targetPath.endsWith(stubTargetPath(version)),
-				'target path not resolved correctly'
+				'target path not resolved correctly',
 			);
 		});
 		it('does not error if .nojekyll is not present', function () {
@@ -226,15 +228,15 @@ describe('Unit testing for typedoc-plugin-versions', function () {
 			vUtils.handleJeckyll(dirs.rootPath, dirs.targetPath);
 			assert.isTrue(
 				fs.existsSync(path.join(dirs.rootPath, '.nojekyll')),
-				'did not move .nojekyll'
+				'did not move .nojekyll',
 			);
 		});
 		it('copies static assets into the target version folder', function () {
 			vUtils.handleAssets(dirs.targetPath);
 			assert.isTrue(
 				fs.existsSync(
-					path.join(dirs.targetPath, 'assets/versionsMenu.js')
-				)
+					path.join(dirs.targetPath, 'assets/versionsMenu.js'),
+				),
 			);
 		});
 	});

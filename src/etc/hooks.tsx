@@ -5,8 +5,7 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Application, JSX } from 'typedoc';
-import { validLocation } from '../types';
+import { Application, JSX, RendererHooks } from 'typedoc';
 
 /**
  * Injects browser js to control the behaviour of the new `select` DOM element
@@ -38,10 +37,11 @@ const validHookLocations = [
  */
 export function injectSelectHtml(
 	app: Application,
-	domLocation: validLocation | string = 'false'
+	domLocation: keyof RendererHooks | 'false',
 ) {
 	if (validHookLocations.indexOf(domLocation) > -1) {
-		app.renderer.hooks.on(domLocation as validLocation, () => (
+		if (domLocation === 'false') return;
+		app.renderer.hooks.on(domLocation, () => (
 			<select id="plugin-versions-select" name="versions"></select>
 		));
 	} else {

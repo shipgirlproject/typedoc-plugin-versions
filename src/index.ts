@@ -10,7 +10,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import * as vUtils from './etc/utils';
 import * as vHooks from './etc/hooks';
-import { validLocation, versionsOptions } from './types';
+import { versionsOptions } from './types';
 export * from './types';
 
 /**
@@ -34,7 +34,7 @@ export function load(app: Application) {
 	const vOptions = vUtils.getVersionsOptions(app) as versionsOptions;
 
 	vHooks.injectSelectJs(app);
-	vHooks.injectSelectHtml(app, vOptions.domLocation as validLocation);
+	vHooks.injectSelectHtml(app, vOptions.domLocation);
 
 	const { rootPath, targetPath } = vUtils.getPaths(app);
 
@@ -43,8 +43,9 @@ export function load(app: Application) {
 	 * before typedoc freezes the options.
 	 */
 	const originalReadOptions = app.options.read.bind(app.options);
-	app.options.read = (logger: Logger) => {
+	app.options.read = async (logger: Logger) => {
 		originalReadOptions(logger);
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		targetPath && (app.options['_values']['out'] = targetPath);
 	};
 
@@ -61,25 +62,25 @@ export function load(app: Application) {
 			rootPath,
 			vOptions.stable,
 			vOptions.dev,
-			vOptions.packageFile
+			vOptions.packageFile,
 		);
 
 		vUtils.makeAliasLink(
 			'stable',
 			rootPath,
 			metadata.stable ?? metadata.dev,
-			vOptions.makeRelativeLinks
+			vOptions.makeRelativeLinks,
 		);
 		vUtils.makeAliasLink(
 			'dev',
 			rootPath,
 			metadata.dev ?? metadata.stable,
-			vOptions.makeRelativeLinks
+			vOptions.makeRelativeLinks,
 		);
 		vUtils.makeMinorVersionLinks(
 			metadata.versions,
 			rootPath,
-			vOptions.makeRelativeLinks
+			vOptions.makeRelativeLinks,
 		);
 
 		const jsVersionKeys = vUtils.makeJsKeys(metadata);
@@ -89,7 +90,7 @@ export function load(app: Application) {
 			path.join(rootPath, 'index.html'),
 			`<meta http-equiv="refresh" content="0; url=${
 				metadata.stable ? 'stable/' : 'dev/'
-			}"/>`
+			}"/>`,
 		);
 
 		vUtils.saveMetadata(metadata, rootPath);

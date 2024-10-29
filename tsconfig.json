@@ -1,4 +1,5 @@
 {
+	"exclude": ["./node_modules/*", "./package.json"],
 	"include": ["src"],
 	"compilerOptions": {
 		"jsx": "react",
@@ -8,13 +9,12 @@
 		"outDir": "dist/src",
 		"module": "commonjs",
 		"moduleResolution": "node",
-		"target": "ES6",
+		"target": "ES2020",
 		"esModuleInterop": true,
 		"declaration": true,
 		"declarationMap": true,
 		"sourceMap": true,
 		"build": true,
 		"incremental": true
-	},
-	"exclude": ["./node_modules", "./package.json"]
+	}
 }
