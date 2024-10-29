@@ -7,7 +7,7 @@
 	"scripts": {
 		"lint": "prettier -c .",
 		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-		"build": "tsc && cpy ./src/assets/versionsMenu.js ./dist/assets/ --flat",
+		"build": "tsc && cpy ./src/assets/versionsMenu.js ./dist/assets/ --flat && cpy ./package.json ./LICENSE.txt ./README.md ./dist --flat",
 		"docs": "typedoc",
 		"build:docs": "npm run build && typedoc",
 		"prepare": "npm run build"
