@@ -6,7 +6,7 @@
 		"jsxFactory": "JSX.createElement",
 		"jsxFragmentFactory": "JSX.Fragment",
 		"resolveJsonModule": true,
-		"outDir": "dist/src",
+		"outDir": "dist",
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"target": "ES2020",
@@ -15,6 +15,7 @@
 		"declarationMap": true,
 		"sourceMap": true,
 		"build": true,
-		"incremental": true
+		"incremental": true,
+		"allowJs": true
 	}
 }

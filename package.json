@@ -2,11 +2,12 @@
 	"name": "@shipgirl/typedoc-plugin-versions",
 	"version": "0.2.4",
 	"description": "It keeps track of your document builds and provides a select menu for versions",
-	"main": "src/index",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"scripts": {
 		"lint": "prettier -c .",
 		"test": "nyc mocha",
-		"build": "tsc && node ./build.js",
+		"build": "tsc",
 		"docs": "typedoc",
 		"docs:build": "npm run build && typedoc",
 		"prepare": "npm run build"
