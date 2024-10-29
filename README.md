@@ -1,39 +1,15 @@
-| :warning: DEPRECATION WARNING                                                |
-| :--------------------------------------------------------------------------- |
-| This package will not work with Typedoc > v0.23 due to breaking API changes. |
+# @shipgirl/typedoc-plugin-versions
 
-[![RELEASE AND PUBLISH](https://github.com/citkane/typedoc-plugin-versions/actions/workflows/release.yml/badge.svg)](https://github.com/citkane/typedoc-plugin-versions/actions/workflows/release.yml)
-[![codecov](https://codecov.io/gh/citkane/typedoc-plugin-versions/branch/main/graph/badge.svg?token=5DDL83JO0R)](https://codecov.io/gh/citkane/typedoc-plugin-versions)
-[![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com/citkane/typedoc-plugin-versions)
-[![Npm](https://badgen.net/badge/icon/npm?icon=npm&label)](https://npmjs.com/package/typedoc-plugin-versions)
-[![docs stable](https://img.shields.io/badge/docs-stable-teal.svg)](https://citkane.github.io/typedoc-plugin-versions/stable)
-[![docs stable](https://img.shields.io/badge/docs-dev-teal.svg)](https://citkane.github.io/typedoc-plugin-versions/dev)
+Fork of [citkane's typedoc-plugin-versions](https://github.com/citkane/typedoc-plugin-versions)
 
-# ↹ typedoc-plugin-versions
-
-<img src="./media/Screenshot.jpg" width="300px" height="auto" border="1px solid light-grey" /><br><br>
-**It keeps track of your document builds and provides a select menu for versions.**
-<br /><br />
-Built for: <a href = "https://semver.org/" target="_blank">semantic versioning</a>.
-
-<br /><br />
 
 ## Usage
 
-Install:
-
-```
-npm i -D typedoc-plugin-versions
-```
-
-and then set up your environment in typedoc.json
-
 ```jsonc
-"plugin": ["typedoc-plugin-versions"],
+"plugin": ["@shipgirl/typedoc-plugin-versions"],
 "versions": { /*...options */ }
 ```
 
-<br /><br />
 
 ## Options
 
@@ -45,8 +21,6 @@ and then set up your environment in typedoc.json
 | **packageFile**       | Pass in an alternative name convention for "package.json"                                                                 | `string`  |  **no**  | package.json                                                                                                                                                                         |
 | **makeRelativeLinks** | Create relative instead of absolute symlinks in the document out directory                                                | `boolean` |  **no**  | `false`                                                                                                                                                                              |
 
-<br /><br />
-
 ## "What sorcery is this?", you may ask...
 
 Typedoc-plugin-versions takes the architectural approach of [JuliaLang Documenter](https://juliadocs.github.io/Documenter.jl/stable/).
@@ -57,8 +31,6 @@ Symlinks are created to minor versions, which are given as options in a `select`
 As long as you do not delete your historic document build folders, the document history remains intact.
 
 If you want to remove a historic version, delete the old folder and rebuild your documentation.
-
-<br /><br />
 
 ## CID
 
@@ -77,9 +49,3 @@ Below is an opinionated Github CI setup. You can hack and change it to suite you
 -   Create a [custom workflow](https://docs.github.com/en/actions/quickstart) as per [this template](https://github.com/citkane/typedoc-plugin-versions/blob/main/.github/workflows/docs.yml) for PUBLISH DOCS.
 
 The "PUBLISH DOCS" action will create a rolling update to your document set.
-
-<br /><br />
-
-## Development Guidelines and howto's
-
-Please refer to the [Wiki Page](https://github.com/citkane/typedoc-plugin-versions/wiki/Development-Guidelines).
