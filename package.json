@@ -6,7 +6,7 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"lint": "prettier -c .",
-		"test": "nyc mocha",
+		"test": "mocha",
 		"build": "tsc",
 		"docs": "typedoc",
 		"docs:build": "npm run build && typedoc",
@@ -46,7 +46,6 @@
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
 		"mocha": "^10.7.3",
-		"nyc": "^17.1.0",
 		"prettier": "^3.3.3",
 		"sinon": "^19.0.2",
 		"ts-node": "^10.9.2",
