@@ -18,7 +18,7 @@ jobs:
                   name: distribution
                   path: ./dist
 
-            - run: jq 'del(.scripts.prepare)' ./dist/package.json
+            - run: cat <<< $(jq 'del(.scripts.prepare)' ./dist/package.json) > ./dist/package.json
             
             - name: Package the build artifact
               run: npm pack ./dist
