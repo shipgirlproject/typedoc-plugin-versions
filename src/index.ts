@@ -4,7 +4,7 @@
  * @module
  */
 
-import { Application, Logger, ParameterType, RendererEvent } from 'typedoc';
+import { Application, ParameterType, RendererEvent } from 'typedoc';
 
 import path from 'path';
 import fs from 'fs-extra';
@@ -39,15 +39,12 @@ export function load(app: Application) {
 	const { rootPath, targetPath } = vUtils.getPaths(app);
 
 	/**
-	 * This is the latest moment possible to inject the modified 'out' location
-	 * before typedoc freezes the options.
+	 * Inject modified 'out' location
 	 */
-	const originalReadOptions = app.options.read.bind(app.options);
-	app.options.read = async (logger: Logger) => {
-		originalReadOptions(logger);
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		targetPath && (app.options['_values']['out'] = targetPath);
-	};
+	app.on("bootstrapEnd", (instance) => {
+		// HACK: private property override
+		if (targetPath) instance.options['_values']['out'] = targetPath;
+	});
 
 	/**
 	 * The documents have rendered and we now process directories into the select options
