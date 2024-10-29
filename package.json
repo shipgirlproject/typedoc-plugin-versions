@@ -35,19 +35,17 @@
 		"semver": "^7.6.3"
 	},
 	"devDependencies": {
-		"@types/chai": "^5.0.1",
 		"@types/fs-extra": "^11.0.4",
-		"@types/mocha": "^10.0.9",
 		"@types/node": "^22.8.2",
 		"@types/semver": "^7.5.8",
 		"@typescript-eslint/eslint-plugin": "^8.12.1",
 		"@typescript-eslint/parser": "^8.12.1",
-		"chai": "^5.1.2",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
-		"mocha": "^10.7.3",
+		"expect": "^29.7.0",
+		"jest": "^29.7.0",
+		"jest-mock": "^29.7.0",
 		"prettier": "^3.3.3",
-		"sinon": "^19.0.2",
 		"ts-node": "^10.9.2",
 		"typedoc": "~0.26.10",
 		"typescript": "^5.6.3"
@@ -66,22 +64,5 @@
 			"./test/hooks.ts"
 		],
 		"exit": true
-	},
-	"nyc": {
-		"extension": [
-			".ts",
-			".tsx"
-		],
-		"include": [
-			"src/**/*.ts"
-		],
-		"reporter": [
-			"clover",
-			"text",
-			"html"
-		],
-		"all": true,
-		"report-dir": "./test/coverage",
-		"temp-dir": "./test/.nyc_output"
 	}
 }
