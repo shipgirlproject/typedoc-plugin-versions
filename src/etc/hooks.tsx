@@ -22,9 +22,9 @@ export function injectSelectJs(app: Application) {
 	});
 }
 
-type ValidHookLocation = keyof RendererHooks | 'false';
+export type ValidHookLocation = keyof RendererHooks | 'false';
 
-export const validHookLocations: ValidHookLocation[] = [
+const validHookLocations: ValidHookLocation[] = [
 	'head.begin',
 	'head.end',
 	'body.begin',
