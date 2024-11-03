@@ -24,7 +24,7 @@ export function injectSelectJs(app: Application) {
 
 type ValidHookLocation = keyof RendererHooks | 'false';
 
-const validHookLocations: ValidHookLocation[] = [
+export const validHookLocations: ValidHookLocation[] = [
 	'head.begin',
 	'head.end',
 	'body.begin',
@@ -40,6 +40,7 @@ const validHookLocations: ValidHookLocation[] = [
 	'comment.beforeTags',
 	'comment.afterTags',
 ] as const;
+
 /**
  * Injects the new `select` dropdown into the HTML
  * @param app
