@@ -55,12 +55,18 @@ export function injectSelectHtml(
 			<select id="plugin-versions-select" name="versions"></select>
 		));
 	} else {
-		app.renderer.hooks.on('body.begin', () => (
-			<select
-				id="plugin-versions-select"
-				class="title"
-				name="versions"
-			></select>
+		app.renderer.hooks.on('head.end', () => (
+			<style>{`
+				.tsd-ext-version-select .settings-label {
+					margin: 0.75rem 0.75rem 0 0;
+			`}</style>
+		));
+
+		app.renderer.hooks.on('pageSidebar.begin', () => (
+			<div class="tsd-ext-version-select">
+				<label class="settings-label" for="plugin-versions-select">Version</label>
+				<select id="plugin-versions-select" name="versions"></select>
+			</div>
 		));
 	}
 }
