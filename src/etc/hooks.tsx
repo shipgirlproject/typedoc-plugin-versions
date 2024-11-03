@@ -22,14 +22,24 @@ export function injectSelectJs(app: Application) {
 	});
 }
 
-const validHookLocations = [
+type ValidHookLocation = keyof RendererHooks | 'false';
+
+const validHookLocations: ValidHookLocation[] = [
+	'head.begin',
+	'head.end',
 	'body.begin',
 	'body.end',
 	'content.begin',
 	'content.end',
-	'navigation.begin',
-	'navigation.end',
-];
+	'sidebar.begin',
+	'sidebar.end',
+	'pageSidebar.begin',
+	'pageSidebar.end',
+	'footer.begin',
+	'footer.end',
+	'comment.beforeTags',
+	'comment.afterTags',
+] as const;
 /**
  * Injects the new `select` dropdown into the HTML
  * @param app
@@ -37,7 +47,7 @@ const validHookLocations = [
  */
 export function injectSelectHtml(
 	app: Application,
-	domLocation: keyof RendererHooks | 'false',
+	domLocation: ValidHookLocation,
 ) {
 	if (validHookLocations.indexOf(domLocation) > -1) {
 		if (domLocation === 'false') return;
