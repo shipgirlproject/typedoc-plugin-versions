@@ -7,7 +7,7 @@
 	"externalPattern": ["**/node_modules/**"],
 	"excludeExternals": true,
 	"logLevel": "Verbose",
-	"plugin": ["./dist"],
+	"plugin": ["./dist/index.js"],
 	"versions": { "packageFile": "package.json", "makeRelativeLinks": false },
 	"skipErrorChecking": true,
 	"name": "Versions Plugin Docs"

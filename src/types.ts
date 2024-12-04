@@ -4,7 +4,7 @@
  * @module
  */
 
-import { RendererHooks } from 'typedoc';
+import type { RendererHooks } from 'typedoc';
 
 /**
  * User defined options under the key of `versions` in typedoc.json

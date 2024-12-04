@@ -1,9 +1,10 @@
 {
 	"name": "@shipgirl/typedoc-plugin-versions",
-	"version": "0.2.8",
+	"version": "0.3.0",
 	"description": "It keeps track of your document builds and provides a select menu for versions",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
+	"type": "module",
 	"scripts": {
 		"lint": "prettier -c .",
 		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
@@ -38,23 +39,23 @@
 		"@jest/globals": "^29.7.0",
 		"@types/fs-extra": "^11.0.4",
 		"@types/jest": "^29.5.14",
-		"@types/node": "^22.8.2",
+		"@types/node": "^22.10.1",
 		"@types/semver": "^7.5.8",
-		"@typescript-eslint/eslint-plugin": "^8.12.1",
-		"@typescript-eslint/parser": "^8.12.1",
+		"@typescript-eslint/eslint-plugin": "^8.17.0",
+		"@typescript-eslint/parser": "^8.17.0",
 		"cpy-cli": "^5.0.0",
 		"cross-env": "^7.0.3",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
 		"expect": "^29.7.0",
 		"jest": "^29.7.0",
-		"prettier": "^3.3.3",
+		"prettier": "^3.4.2",
 		"ts-jest": "^29.2.5",
 		"ts-node": "^10.9.2",
-		"typedoc": "~0.26.10",
-		"typescript": "^5.6.3"
+		"typedoc": "~0.27.3",
+		"typescript": "^5.7.2"
 	},
 	"peerDependencies": {
-		"typedoc": "~0.26.0"
+		"typedoc": "~0.26.0 || ~0.27.0"
 	}
 }

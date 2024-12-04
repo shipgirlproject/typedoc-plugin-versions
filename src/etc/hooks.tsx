@@ -5,7 +5,7 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Application, JSX, RendererHooks } from 'typedoc';
+import { Application, JSX, type RendererHooks } from 'typedoc';
 
 /**
  * Injects browser js to control the behaviour of the new `select` DOM element

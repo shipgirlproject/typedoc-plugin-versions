@@ -7,7 +7,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import semver from 'semver';
-import { version, semanticAlias, metadata } from '../types';
+import type { version, semanticAlias, metadata } from '../types.js';
 import { Application } from 'typedoc';
 const packagePath = path.join(process.cwd(), 'package.json');
 const pack = fs.readJSONSync(packagePath);
@@ -54,10 +54,10 @@ export function refreshMetadata(
 	const vDev = validate(dev);
 
 	const versions = refreshMetadataVersions(
-		[...(metadata.versions ?? []), metadata.stable, metadata.dev],
+		[...(metadata.versions ?? []), metadata.stable!, metadata.dev!],
 		docRoot,
 		packageFile,
-	);
+	) as version[];
 
 	return {
 		versions,
@@ -75,7 +75,7 @@ export function refreshMetadata(
 export function refreshMetadataVersions(
 	versions: version[],
 	docRoot: string,
-	packageFile,
+	packageFile: string,
 ) {
 	return (
 		[
@@ -110,7 +110,7 @@ export function refreshMetadataVersions(
 			// discard undefined && filter to unique values only
 			.filter((v, i, s) => v !== undefined && s.indexOf(v) === i)
 			// sort in descending order
-			.sort(semver.rcompare)
+			.sort((a, b) => semver.rcompare(a!, b!))
 	);
 }
 
@@ -127,7 +127,7 @@ export function refreshMetadataAlias(
 	versions: version[],
 	stable: 'auto' | version = 'auto',
 	dev: 'auto' | version = 'auto',
-): version {
+): version | undefined {
 	const option = alias === 'stable' ? stable : dev;
 	if (
 		option && // the option is set
@@ -143,7 +143,7 @@ export function refreshMetadataAlias(
 				!getLatestVersion('stable', versions, stable, dev) || // or there is no matching latest stable
 				semver.gte(
 					latest,
-					getLatestVersion('stable', versions, stable, dev),
+					getLatestVersion('stable', versions, stable, dev)!,
 					true,
 				))
 		) {
@@ -174,7 +174,7 @@ export function getLatestVersion(
 	versions: version[],
 	stable: 'auto' | version = 'auto',
 	dev: 'auto' | version = 'auto',
-): version {
+): version | undefined {
 	return [...versions]
 		.sort(semver.rcompare)
 		.find((v) => getVersionAlias(v, stable, dev) === alias);
@@ -225,7 +225,7 @@ export function getSemanticVersion(version: string = pack.version): version {
 	// ensure prerelease info remains appended
 	const prerelease = semver.prerelease(version, true);
 	return prerelease
-		? `v${semVer.version}-${semver.prerelease(version, true).join('.')}`
+		? `v${semVer.version}-${semver.prerelease(version, true)!.join('.')}`
 		: `v${semVer.version}`;
 }
 
@@ -235,7 +235,7 @@ export function getSemanticVersion(version: string = pack.version): version {
  */
 export function getMinorVersion(version?: string): version {
 	version = getSemanticVersion(version);
-	const { major, minor } = semver.coerce(version, { loose: true });
+	const { major, minor } = semver.coerce(version, { loose: true })!;
 	return `v${major}.${minor}`;
 }
 
@@ -275,7 +275,7 @@ export function makeJsKeys(metadata: metadata): string {
 	const alias = metadata.stable ? 'stable' : 'dev';
 	const keys = [
 		alias, // add initial key (stable or dev)
-		...metadata.versions // add the major.minor versions
+		...metadata.versions! // add the major.minor versions
 			.map((v) => getMinorVersion(v))
 			.filter((v, i, s) => s.indexOf(v) === i),
 	];
@@ -321,8 +321,11 @@ export function makeAliasLink(
 
 /**
  * Creates symlinks for minor versions pointing to the latest patch release
- * @param semGroups
+ * @param versions
  * @param docRoot
+ * @param makeRelativeSymlinks
+ * @param stable
+ * @param dev
  */
 export function makeMinorVersionLinks(
 	versions: version[],
@@ -360,7 +363,7 @@ export function makeMinorVersionLinks(
 		.filter((v, i, s) => s.indexOf(v) === i)) {
 		const _docRoot = makeRelativeSymlinks ? './' : docRoot;
 		const target = path.join(_docRoot, getMinorVersion(version));
-		const src = path.join(_docRoot, version);
+		const src = path.join(_docRoot, version!);
 		if (makeRelativeSymlinks) process.chdir(docRoot);
 
 		if (fs.lstatSync(target, { throwIfNoEntry: false })?.isSymbolicLink())
@@ -375,7 +378,7 @@ export function makeMinorVersionLinks(
  * @param docRoot The path to the docs root.
  * @returns The version number parsed from the given symlink.
  */
-export function getSymlinkVersion(symlink: string, docRoot: string): version {
+export function getSymlinkVersion(symlink: string, docRoot: string): version | undefined {
 	const symlinkPath = path.join(docRoot, symlink);
 	if (
 		fs.pathExistsSync(symlinkPath) &&
@@ -425,7 +428,7 @@ export function handleJeckyll(rootPath: string, targetPath: string): void {
  * Copies static assets to the document build folder
  * @param targetPath
  */
-export function handleAssets(targetPath: string, srcDir: string = __dirname) {
+export function handleAssets(targetPath: string, srcDir: string = import.meta.dirname) {
 	const sourceAsset = path.join(srcDir, '../assets/versionsMenu.js');
 	fs.ensureDirSync(path.join(targetPath, 'assets'));
 	fs.copyFileSync(

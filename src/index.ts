@@ -8,10 +8,10 @@ import { Application, ParameterType, RendererEvent } from 'typedoc';
 
 import path from 'path';
 import fs from 'fs-extra';
-import * as vUtils from './etc/utils';
-import * as vHooks from './etc/hooks';
-import { versionsOptions } from './types';
-export * from './types';
+import * as vUtils from './etc/utils.js';
+import * as vHooks from './etc/hooks.js';
+import type { versionsOptions } from './types.js';
+export * from './types.js';
 
 /**
  * The default Typedoc [plugin hook](https://typedoc.org/guides/development/#plugins).
@@ -34,7 +34,7 @@ export function load(app: Application) {
 	const vOptions = app.options.getValue("versions") as versionsOptions;
 
 	vHooks.injectSelectJs(app);
-	vHooks.injectSelectHtml(app, vOptions.domLocation);
+	vHooks.injectSelectHtml(app, vOptions.domLocation!);
 
 	const { rootPath, targetPath } = vUtils.getPaths(app);
 
@@ -65,17 +65,17 @@ export function load(app: Application) {
 		vUtils.makeAliasLink(
 			'stable',
 			rootPath,
-			metadata.stable ?? metadata.dev,
+			metadata.stable! ?? metadata.dev,
 			vOptions.makeRelativeLinks,
 		);
 		vUtils.makeAliasLink(
 			'dev',
 			rootPath,
-			metadata.dev ?? metadata.stable,
+			metadata.dev! ?? metadata.stable,
 			vOptions.makeRelativeLinks,
 		);
 		vUtils.makeMinorVersionLinks(
-			metadata.versions,
+			metadata.versions!,
 			rootPath,
 			vOptions.makeRelativeLinks,
 		);
