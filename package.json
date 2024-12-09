@@ -11,7 +11,8 @@
 		"build": "tsc && cpy ./src/assets/versionsMenu.js ./dist/assets/ --flat && cpy ./package.json ./LICENSE.txt ./README.md ./dist --flat",
 		"docs": "typedoc",
 		"build:docs": "npm run build && typedoc",
-		"prepare": "npm run build"
+		"prepare": "npm run build",
+		"update-deps": "npm-check-updates -x eslint -u"
 	},
 	"repository": {
 		"type": "git",
@@ -41,18 +42,19 @@
 		"@types/jest": "^29.5.14",
 		"@types/node": "^22.10.1",
 		"@types/semver": "^7.5.8",
-		"@typescript-eslint/eslint-plugin": "^8.17.0",
-		"@typescript-eslint/parser": "^8.17.0",
+		"@typescript-eslint/eslint-plugin": "^8.18.0",
+		"@typescript-eslint/parser": "^8.18.0",
 		"cpy-cli": "^5.0.0",
 		"cross-env": "^7.0.3",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
 		"expect": "^29.7.0",
 		"jest": "^29.7.0",
+		"npm-check-updates": "^17.1.11",
 		"prettier": "^3.4.2",
 		"ts-jest": "^29.2.5",
 		"ts-node": "^10.9.2",
-		"typedoc": "~0.27.3",
+		"typedoc": "~0.27.4",
 		"typescript": "^5.7.2"
 	},
 	"peerDependencies": {
