@@ -60,6 +60,7 @@ export function injectSelectHtml(
 			<style>{`
 				.tsd-ext-version-select .settings-label {
 					margin: 0.75rem 0.75rem 0 0;
+				}
 			`}</style>
 		));
 
