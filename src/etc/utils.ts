@@ -9,6 +9,7 @@ import fs from 'fs-extra';
 import semver from 'semver';
 import type { version, semanticAlias, metadata } from '../types.js';
 import { Application } from 'typedoc';
+import { fileURLToPath } from 'url';
 const packagePath = path.join(process.cwd(), 'package.json');
 const pack = fs.readJSONSync(packagePath);
 
@@ -428,7 +429,7 @@ export function handleJeckyll(rootPath: string, targetPath: string): void {
  * Copies static assets to the document build folder
  * @param targetPath
  */
-export function handleAssets(targetPath: string, srcDir: string = import.meta.dirname) {
+export function handleAssets(targetPath: string, srcDir: string = path.dirname(fileURLToPath(import.meta.url))) {
 	const sourceAsset = path.join(srcDir, '../assets/versionsMenu.js');
 	fs.ensureDirSync(path.join(targetPath, 'assets'));
 	fs.copyFileSync(

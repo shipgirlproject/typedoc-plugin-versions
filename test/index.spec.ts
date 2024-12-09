@@ -1,25 +1,30 @@
-import expect from 'expect';
+import { expect } from 'expect';
 import path from 'path';
 import fs from 'fs-extra';
 import { describe, it } from '@jest/globals';
-import * as vUtils from '../src/etc/utils';
-import { minorVerRegex, verRegex } from '../src/etc/utils';
+import * as vUtils from '../src/etc/utils.js';
+import { minorVerRegex, verRegex } from '../src/etc/utils.js';
 import {
 	docsPath,
 	jsKeys,
+	optionsPath,
 	stubOptionKeys,
 	stubPathKeys,
 	stubRootPath,
 	stubSemanticLinks,
 	stubTargetPath,
 	stubVersions,
-} from './stubs/stubs';
+} from './stubs/stubs.js';
 import { Application } from 'typedoc';
-import { load } from '../src/index';
+import { load } from '../src/index.js';
+
+const typedocOptions: Parameters<typeof Application.bootstrap>[0] = {
+	options: optionsPath,
+}
 
 describe('Unit testing for typedoc-plugin-versions', () => {
 	it('loads and parses options', async () => {
-		const app = await Application.bootstrap();
+		const app = await Application.bootstrap(typedocOptions);
 		const options = load(app);
 
 		for (const key of stubOptionKeys) {
@@ -141,7 +146,7 @@ describe('Unit testing for typedoc-plugin-versions', () => {
 	});
 	describe('handle file operations correctly', () => {
 		it('maps correct output paths', async () => {
-			const app = await Application.bootstrap();
+			const app = await Application.bootstrap(typedocOptions);
 			const version = 'v0.0.0';
 			app.options.setValue('out', docsPath);
 			const dirs = vUtils.getPaths(app, version);
@@ -152,7 +157,7 @@ describe('Unit testing for typedoc-plugin-versions', () => {
 			expect(dirs.targetPath.endsWith(stubTargetPath(version))).toBe(true);
 		});
 		it('does not error if .nojekyll is not present', async () => {
-			const app = await Application.bootstrap();
+			const app = await Application.bootstrap(typedocOptions);
 			const version = 'v0.0.0';
 			app.options.setValue('out', docsPath);
 			const dirs = vUtils.getPaths(app, version);
@@ -161,7 +166,7 @@ describe('Unit testing for typedoc-plugin-versions', () => {
 			}).not.toThrow();
 		});
 		it('copies .nojekyll to the document root if exists', async () => {
-			const app = await Application.bootstrap();
+			const app = await Application.bootstrap(typedocOptions);
 			const version = 'v0.0.0';
 			app.options.setValue('out', docsPath);
 			const dirs = vUtils.getPaths(app, version);
@@ -170,7 +175,7 @@ describe('Unit testing for typedoc-plugin-versions', () => {
 			expect(fs.existsSync(path.join(dirs.rootPath, '.nojekyll'))).toBe(true);
 		});
 		it('copies static assets into the target version folder', async () => {
-			const app = await Application.bootstrap();
+			const app = await Application.bootstrap(typedocOptions);
 			const version = 'v0.0.0';
 			app.options.setValue('out', docsPath);
 			const dirs = vUtils.getPaths(app, version);

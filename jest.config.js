@@ -1,16 +1,20 @@
 // @ts-check
-/* eslint-disable no-undef */
+import { createDefaultEsmPreset } from 'ts-jest';
+
 /** @type {import('ts-jest').JestConfigWithTsJest} **/
-module.exports = {
+export default {
+  ...createDefaultEsmPreset({}),
   testEnvironment: "node",
-  transform: {
-    "^.+.tsx?$": ["ts-jest",{}],
-  },
   moduleFileExtensions: [
     "ts",
     "tsx",
+    "mts",
+    "mjs",
     "js"
   ],
+  moduleNameMapper: {
+    "^(\\.\\.?\\/.+)\\.jsx?$": "$1"
+  },
   setupFilesAfterEnv: [
     "./test/hooks.ts"
   ],

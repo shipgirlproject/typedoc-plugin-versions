@@ -4,7 +4,7 @@ process.env.Node = 'test';
 
 import fs from 'fs-extra';
 import path from 'path';
-import { docsPath, stubVersions } from './stubs/stubs';
+import { docsPath, stubVersions } from './stubs/stubs.js';
 
 jest.spyOn(console, 'error').mockClear();
 jest.spyOn(console, 'warn').mockClear();
