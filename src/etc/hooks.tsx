@@ -59,7 +59,7 @@ export function injectSelectHtml(
 		app.renderer.hooks.on('head.end', () => (
 			<style>{`
 				.tsd-ext-version-select .settings-label {
-					margin: 0.75rem 0.75rem 0 0;
+					margin: 0.75rem 0.75rem 0.75rem 0;
 				}
 			`}</style>
 		));
