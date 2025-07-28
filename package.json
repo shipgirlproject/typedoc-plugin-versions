@@ -2,8 +2,8 @@
 	"name": "@shipgirl/typedoc-plugin-versions",
 	"version": "0.3.1",
 	"description": "It keeps track of your document builds and provides a select menu for versions",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"main": "./index.js",
+	"types": "./index.d.ts",
 	"type": "module",
 	"scripts": {
 		"lint": "prettier -c .",
