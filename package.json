@@ -1,6 +1,6 @@
 {
 	"name": "@shipgirl/typedoc-plugin-versions",
-	"version": "0.3.1",
+	"version": "0.3.2",
 	"description": "It keeps track of your document builds and provides a select menu for versions",
 	"main": "./index.js",
 	"types": "./index.d.ts",
