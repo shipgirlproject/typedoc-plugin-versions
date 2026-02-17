@@ -1,6 +1,11 @@
 name: Release and Publish
 on:
     workflow_dispatch:
+
+permissions:
+    id-token: write
+    contents: read
+
 jobs:
     test:
         uses: ./.github/workflows/test.yml
@@ -58,8 +63,6 @@ jobs:
                   cache: npm
                   registry-url: https://registry.npmjs.org
             - run: npm publish --access public ./dist
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     document:
         needs: release
