@@ -315,8 +315,11 @@ export function makeAliasLink(
 	if (!fs.pathExistsSync(stableSource))
 		throw new Error(`Document directory does not exist: ${pegVersion}`);
 
-	if (fs.lstatSync(stableTarget, { throwIfNoEntry: false })?.isSymbolicLink())
-		fs.unlinkSync(stableTarget);
+	// Clear any existing entry at the alias path -- not only a symlink, but also
+	// a directory or file (e.g. docs restored from a previously published site,
+	// where the alias was materialised as a directory) -- so the symlink can be
+	// (re)created without throwing EEXIST.
+	fs.removeSync(stableTarget);
 	fs.ensureSymlinkSync(stableSource, stableTarget, 'junction');
 }
 
@@ -367,8 +370,9 @@ export function makeMinorVersionLinks(
 		const src = path.join(_docRoot, version!);
 		if (makeRelativeSymlinks) process.chdir(docRoot);
 
-		if (fs.lstatSync(target, { throwIfNoEntry: false })?.isSymbolicLink())
-			fs.unlinkSync(target);
+		// Same as makeAliasLink: clear any existing entry (symlink, directory, or
+		// file) at the minor-version alias before (re)creating the symlink.
+		fs.removeSync(target);
 		fs.ensureSymlinkSync(src, target, 'junction');
 	}
 }

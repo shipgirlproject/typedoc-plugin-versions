@@ -143,6 +143,18 @@ describe('Unit testing for typedoc-plugin-versions', () => {
 				expect(fs.existsSync(linkPath)).toBe(true);
 			});
 		});
+		it('replaces a pre-existing directory at the alias path without throwing', () => {
+			const link = path.join(docsPath, 'stable');
+			// Simulate docs restored from a previously published site, where the
+			// alias was materialised as a real directory instead of a symlink.
+			fs.removeSync(link);
+			fs.ensureDirSync(link);
+			expect(fs.lstatSync(link).isDirectory()).toBe(true);
+			expect(() =>
+				vUtils.makeAliasLink('stable', docsPath, 'v0.1'),
+			).not.toThrow();
+			expect(fs.lstatSync(link).isSymbolicLink()).toBe(true);
+		});
 	});
 	describe('handle file operations correctly', () => {
 		it('maps correct output paths', async () => {
